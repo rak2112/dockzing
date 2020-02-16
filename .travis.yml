@@ -7,7 +7,7 @@ before_install:
   - docker build -t @rak2112/ui-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run @rak2112/ui-test npm test -- --coverage
+  - docker run -e CI=true rak2112/react-test npm test
 
 after_success:
   - docker build -t @rak2112/multi-client ./client
