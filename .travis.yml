@@ -1,0 +1,30 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t @rak2112/ui-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run @rak2112/ui-test npm test -- --coverage
+
+after_success:
+  - docker build -t @rak2112/multi-client ./client
+  - docker build -t @rak2112/multi-nginx ./nginx
+  - docker build -t @rak2112/multi-server ./server
+  - docker build -t @rak2112/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push @rak2112/multi-client
+  - docker push @rak2112/multi-nginx
+  - docker push @rak2112/multi-server
+  - docker push @rak2112/multi-worker
+
+
+
+
+
+
+
+
+
